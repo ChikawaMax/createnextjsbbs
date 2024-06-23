@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { insertData } from "./actions";
 
-const Page = () => {
+const Insert = () => {
     // 挿入するデータ
     const [user, setUser] = useState('');
     const [text, setText] = useState('');
@@ -19,4 +19,4 @@ const Page = () => {
     );
 }
 
-export default Page;
+export default Insert;

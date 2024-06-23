@@ -1,12 +1,10 @@
+import { createClient } from '../../../app/utils/supabase/server';
+import { deleteData } from './action';
 
-// サーバー側の処理なので、サーバー側のSupabaseクライアントを使用
-import { createClient } from '../utils/supabase/server';
-import { updateData } from './action';
-
-// このページをSSRにする（App Routerの仕様で、これがないと本番環境でこのページはSSGになる。その結果データベースを更新しても反映されなくなる。）
+// このページをSSRにする（これがないと本番環境でこのページはSSGになる。その結果データベースを更新しても反映されなくなる。）
 export const revalidate = 0;
 
-const Page = async () => {
+const Delete = async () => {
     // Supabaseクライアントを作成
     const supabase = createClient();
 
@@ -27,11 +25,11 @@ const Page = async () => {
                     {/* データの数だけフォームを用意 */}
                     {bbs.map(bb => (
                         <li key={bb.id}>
-                            <form action={updateData}>
-                                <input type='text' defaultValue={bb.user!} name='user' />
-                                <input type='text' defaultValue={bb.text!} name='text' />
+                            <form action={deleteData}>
+                                <input type='text' defaultValue={bb.user!} name='user' disabled />
+                                <input type='text' defaultValue={bb.text!} name='text' disabled />
                                 <input type='number' defaultValue={bb.id} name='id' hidden />
-                                <button type='submit'>更新</button>
+                                <button type='submit'>削除</button>
                             </form>
                         </li>
                     ))}
@@ -41,4 +39,4 @@ const Page = async () => {
     );
 }
 
-export default Page
+export default Delete

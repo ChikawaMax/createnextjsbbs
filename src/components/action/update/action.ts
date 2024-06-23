@@ -1,7 +1,6 @@
 'use server'
 
-import { createClient } from "../utils/supabase/server"
-
+import { createClient } from "@/app/utils/supabase/server"
 
 /**
  * データ更新
