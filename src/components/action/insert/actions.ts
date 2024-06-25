@@ -2,7 +2,6 @@
 
 import { createClient } from "@/app/utils/supabase/server"
 
-
 // サーバー側の処理なので、サーバー側のSupabaseクライアントを使用
 
 /**
@@ -11,7 +10,7 @@ import { createClient } from "@/app/utils/supabase/server"
  */
 export async function insertData(formData: FormData) {
     // Supabaseクライアントを作成
-    const supabase = await createClient()
+    const supabase = createClient()
 
     // フォームから入力値を取得
     const inputs = {
@@ -21,11 +20,11 @@ export async function insertData(formData: FormData) {
 
     // データ挿入
     const { error } = await supabase
-        .from("BBS")                  // todosテーブルに
+        .from("BBS")                  // BBSテーブルに
         .insert({ text: inputs.text, user: inputs.user })  // 入力されたテキストを挿入
 
     // エラーが発生した場合
     if (error) {
-        // ...
+        console.error("データ挿入でエラーが発生しました", error);
     }
 }

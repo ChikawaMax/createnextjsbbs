@@ -1,13 +1,14 @@
-import Delete from "@/components/action/delete/delete";
 import Insert from "@/components/action/insert/insert";
-import Update from "@/components/action/update/update";
+import { ModeToggle } from "@/components/ui/ModeToggle";
 
 export default function Home() {
   return (
-    <div className="grid grid-cols-1 gap-5">
+    <div>
+      <div className='flex justify-center gap-3 mt-3 text-xl items-center'>
+        <h1>掲示板</h1>
+        <ModeToggle />
+      </div>
       <Insert />
-      {/* <Update />
-      <Delete /> */}
     </div>
   );
 }

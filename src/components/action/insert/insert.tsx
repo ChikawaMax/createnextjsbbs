@@ -1,8 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { insertData } from "./actions";
 import { createClient } from '@/app/utils/supabase/client';
+import { insertData } from './actions';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 interface Props {
     id: number;
@@ -12,11 +14,9 @@ interface Props {
 
 const Insert = () => {
     const [bbs, setBbs] = useState<Props[]>([]);
-    const [user, setUser] = useState<string>('');
+    const [user, setUser] = useState<string>('名無し');
     const [text, setText] = useState<string>('');
-    const [count, setCount] = useState<number>(0)
-
-    const handleClick = () => setCount((prevCount) => prevCount + 1);
+    const [count, setCount] = useState<number>(0);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -40,24 +40,48 @@ const Insert = () => {
         };
 
         fetchData();
-    }, [count]); // 空の依存配列で、コンポーネントの初回レンダリング時に実行
+    }, [count]); // カウントが変わるたびにデータを再取得
+
+    const handleClick = async (e: React.FormEvent) => {
+        e.preventDefault(); // デフォルトのフォーム送信を防ぐ
+
+        // データ挿入
+        await insertData(new FormData(e.currentTarget as HTMLFormElement));
+
+        // カウントを更新してデータを再取得させる
+        setCount((prevCount) => prevCount + 1);
+
+        // フォームをリセット
+        setUser('');
+        setText('');
+    };
 
     return (
         <main>
-            <form action={insertData} className='flex gap-5'>
-                <input type='text' value={user} name='user' onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUser(e.target.value)} />
-                <input type='text' value={text} name='text' onChange={(e: React.ChangeEvent<HTMLInputElement>) => setText(e.target.value)} />
-                <button type='submit' onClick={handleClick}>追加</button>
-            </form>
             {bbs.length > 0 &&
-                <ul>
+                <div>
                     {bbs.map(bb => (
-                        <li key={bb.id}>
-                            <span>{bb.user}</span> : <span>{bb.text}</span>
-                        </li>
+                        <div className='border bg-secondary p-2 m-2 rounded-lg' key={bb.id}>
+                            <p className='text-sm'>ユーザー名：{bb.user}</p>
+                            <p>{bb.text}</p>
+                        </div>
                     ))}
-                </ul>
+                </div>
             }
+
+            <form onSubmit={handleClick} className='border bg-secondary mt-10 grid gap-3 m-2 p-2 rounded-lg'>
+                <div className='w-1/4'>
+                    <div>ユーザー名</div>
+                    <Input type='text' value={user} name='user' onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUser(e.target.value)} />
+                </div>
+                <div className='w-1/2'>
+                    <div>コメント</div>
+                    <Input type='text' value={text} name='text' onChange={(e: React.ChangeEvent<HTMLInputElement>) => setText(e.target.value)} />
+                </div>
+                <div>
+                    <Button type='submit'>追加</Button>
+                </div>
+            </form>
         </main>
     );
 }
