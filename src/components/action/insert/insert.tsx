@@ -52,7 +52,7 @@ const Insert = () => {
         setCount((prevCount) => prevCount + 1);
 
         // フォームをリセット
-        setUser('');
+        setUser('名無し');
         setText('');
     };
 
@@ -62,7 +62,7 @@ const Insert = () => {
                 <div>
                     {bbs.map(bb => (
                         <div className='border bg-secondary p-2 m-2 rounded-lg' key={bb.id}>
-                            <p className='text-sm'>ユーザー名：{bb.user}</p>
+                            <p className='text-sm'>[{bb.id}] {bb.user}</p>
                             <p>{bb.text}</p>
                         </div>
                     ))}
@@ -71,11 +71,11 @@ const Insert = () => {
 
             <form onSubmit={handleClick} className='border bg-secondary mt-10 grid gap-3 m-2 p-2 rounded-lg'>
                 <div className='w-1/4'>
-                    <div>ユーザー名</div>
+                    <div>名前</div>
                     <Input type='text' value={user} name='user' onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUser(e.target.value)} />
                 </div>
                 <div className='w-1/2'>
-                    <div>コメント</div>
+                    <div>内容</div>
                     <Input type='text' value={text} name='text' onChange={(e: React.ChangeEvent<HTMLInputElement>) => setText(e.target.value)} />
                 </div>
                 <div>
